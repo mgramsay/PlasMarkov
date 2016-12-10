@@ -30,10 +30,19 @@ def random_start(start_ngrams, start_probs):
 
 def main(corpus):
     tweet = []
-    full_text = sample_text.read_string_list(corpus)
-    ngram_list = sample_text.build_ngram_list(full_text)
-    t_matrix, start_ngrams, start_probs, word_list = \
-        matrices.build_transition_matrix(full_text, ngram_list)
+    found_matrix_files = True
+#    found_matrix_files = test_for_matrix_files()
+    if found_matrix_files and not corpus:
+        start_ngrams, start_probs = matrices.read_start_matrix()
+        t_matrix, word_list, ngram_list = \
+            matrices.read_transition_matrix()
+    else:
+        if not corpus:
+            corpus = 'example.txt'
+        full_text = sample_text.read_string_list(corpus)
+        ngram_list = sample_text.build_ngram_list(full_text)
+        t_matrix, start_ngrams, start_probs, word_list = \
+            matrices.build_transition_matrix(full_text, ngram_list)
 
     remaining_chars = 140
     while remaining_chars > 0:
@@ -75,7 +84,7 @@ def main(corpus):
     print new_tweet
 
 if __name__ == '__main__':
-    corpus = 'example.txt'
+    corpus = None
     if len(sys.argv) > 1:
         corpus = sys.argv[1]
     main(corpus)

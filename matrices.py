@@ -14,6 +14,39 @@ def build_transition_matrix(full_text, ngram_list):
     save_starts(start_ngrams, start_probs)
     return t_matrix, start_ngrams, start_probs, word_list
 
+def read_start_matrix():
+    start_ngrams = []
+    start_probs = []
+    read_file = open('start_matrix.txt', 'r')
+    for line in read_file:
+        new_line = line.rstrip().rpartition(' ')
+        start_ngrams.append(new_line[0])
+        start_probs.append(float(new_line[2]))
+    read_file.close()
+    return start_ngrams, start_probs
+
+def read_transition_matrix():
+    word_list = []
+    ngram_list = []
+    prob_matrix = []
+    read_file = open('t_matrix.txt', 'r')
+    word_list = read_file.readline().split()
+    num_words = len(word_list)
+    for line in read_file:
+        new_line = line.split()
+        prob_list = new_line[len(new_line)-num_words:len(new_line)]
+        matrix_row = []
+        for prob in prob_list:
+            matrix_row.append(float(prob))
+        prob_matrix.append(matrix_row)
+        new_ngram = ' '.join(new_line[0:len(new_line)-num_words])
+        ngram_list.append(new_ngram)
+    read_file.close()
+    t_matrix = transition_matrix(num_ngrams=len(ngram_list),
+                                 num_words=num_words)
+    t_matrix.matrix = prob_matrix
+    return t_matrix, word_list, ngram_list
+
 def build_unique_word_list(full_text):
     '''
     Builds a list of the words which appear in the full text. To save time,
