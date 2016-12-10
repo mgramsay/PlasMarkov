@@ -94,12 +94,17 @@ class transition_matrix(object):
 
     def save(self, ngram_list, word_list):
         save_file = open('t_matrix.txt', 'w')
-        save_file.write(str(word_list))
+        save_line = ' '.join(word_list)
+        save_file.write(save_line)
         save_file.write('\n')
         for ingram in xrange(len(ngram_list)):
+            prob_list = []
+            for iword in xrange(len(self.matrix[ingram])):
+                prob_list.append(str(self.matrix[ingram][iword]))
+            save_line = ' '.join(prob_list)
             save_file.write(ngram_list[ingram])
             save_file.write(' ')
-            save_file.write(str(self.matrix[ingram]))
+            save_file.write(save_line)
             save_file.write('\n')
         save_file.close()
 
