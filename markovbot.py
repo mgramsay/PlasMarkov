@@ -4,6 +4,8 @@
 A basic Markov chain bot
 '''
 
+import sys
+
 import sample_text
 import arb_random
 import matrices
@@ -26,10 +28,9 @@ def random_start(start_ngrams, start_probs):
     last_word, new_word = ngrams.split_ngram(start_ngrams[start_ind])
     return last_word, new_word
 
-def main():
+def main(corpus):
     tweet = []
-    text_file = 'test.txt'
-    full_text = sample_text.read_string_list(text_file)
+    full_text = sample_text.read_string_list(corpus)
     ngram_list = sample_text.build_ngram_list(full_text)
     t_matrix, start_ngrams, start_probs, word_list = \
         matrices.build_transition_matrix(full_text, ngram_list)
@@ -75,4 +76,7 @@ def main():
     print new_tweet
 
 if __name__ == '__main__':
-    main()
+    corpus = 'example.txt'
+    if len(sys.argv) > 1:
+        corpus = sys.argv[1]
+    main(corpus)
