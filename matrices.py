@@ -2,8 +2,12 @@
 Constructs the transition matrix
 '''
 
+import os
 
 import ngrams
+
+START_FILE = 'start_matrix.txt'
+MATRIX_FILE = 't_matrix.txt'
 
 def build_transition_matrix(full_text, ngram_list):
     start_ngrams, start_probs, word_list = build_unique_word_list(full_text)
@@ -13,6 +17,15 @@ def build_transition_matrix(full_text, ngram_list):
     t_matrix.save(ngram_list, word_list)
     save_starts(start_ngrams, start_probs)
     return t_matrix, start_ngrams, start_probs, word_list
+
+def test_for_matrix_files():
+    found_start_matrix = False
+    found_t_matrix = False
+    if os.path.isfile(START_FILE):
+        found_start_matrix = True
+    if os.path.isfile(MATRIX_FILE):
+        found_t_matrix = True
+    return found_start_matrix and found_t_matrix
 
 def read_start_matrix():
     start_ngrams = []

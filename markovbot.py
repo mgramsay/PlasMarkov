@@ -30,14 +30,16 @@ def random_start(start_ngrams, start_probs):
 
 def main(corpus):
     tweet = []
-    found_matrix_files = True
-#    found_matrix_files = test_for_matrix_files()
+    found_matrix_files = matrices.test_for_matrix_files()
     if found_matrix_files and not corpus:
         start_ngrams, start_probs = matrices.read_start_matrix()
         t_matrix, word_list, ngram_list = \
             matrices.read_transition_matrix()
     else:
         if not corpus:
+            print 'No matrix files found, and no corpus provided.'
+            print 'Running using the contents of example.txt'
+            print ''
             corpus = 'example.txt'
         full_text = sample_text.read_string_list(corpus)
         ngram_list = sample_text.build_ngram_list(full_text)
