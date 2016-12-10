@@ -4,6 +4,8 @@
 A basic Markov chain bot
 '''
 
+import sys
+
 import sample_text
 import arb_random
 import matrices
@@ -26,13 +28,23 @@ def random_start(start_ngrams, start_probs):
     last_word, new_word = ngrams.split_ngram(start_ngrams[start_ind])
     return last_word, new_word
 
-def main():
+def main(corpus):
     tweet = []
-    text_file = 'test.txt'
-    full_text = sample_text.read_string_list(text_file)
-    ngram_list = sample_text.build_ngram_list(full_text)
-    t_matrix, start_ngrams, start_probs, word_list = \
-        matrices.build_transition_matrix(full_text, ngram_list)
+    found_matrix_files = matrices.test_for_matrix_files()
+    if found_matrix_files and not corpus:
+        start_ngrams, start_probs = matrices.read_start_matrix()
+        t_matrix, word_list, ngram_list = \
+            matrices.read_transition_matrix()
+    else:
+        if not corpus:
+            print 'No matrix files found, and no corpus provided.'
+            print 'Running using the contents of example.txt'
+            print ''
+            corpus = 'example.txt'
+        full_text = sample_text.read_string_list(corpus)
+        ngram_list = sample_text.build_ngram_list(full_text)
+        t_matrix, start_ngrams, start_probs, word_list = \
+            matrices.build_transition_matrix(full_text, ngram_list)
 
     remaining_chars = 140
     while remaining_chars > 0:
@@ -46,6 +58,8 @@ def main():
             # For any sentences after the first, just use the transition matrix
             if next_word_index == -1:
                 last_word, new_word = random_start(start_ngrams, start_probs)
+                if last_word not in ngrams.PUNCTUATION:
+                    sentence.append(' ')
                 sentence.append(last_word)
             else:
                 last_word = new_word
@@ -64,15 +78,15 @@ def main():
         to_append = ''.join(sentence)
         if len(to_append) <= 140:
             remaining_chars -= len(to_append)
-            if len(tweet) > 0:
-                remaining_chars -= 1
-                # Account for spaces between sentences
             tweet.append(to_append)
     if len(tweet) > 1:
-        new_tweet = ' '.join(tweet[0:len(tweet)-1])
+        new_tweet = ''.join(tweet[0:len(tweet)-1])
     else:
         new_tweet = tweet[0]
     print new_tweet
 
 if __name__ == '__main__':
-    main()
+    corpus = None
+    if len(sys.argv) > 1:
+        corpus = sys.argv[1]
+    main(corpus)

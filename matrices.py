@@ -2,8 +2,12 @@
 Constructs the transition matrix
 '''
 
+import os
 
 import ngrams
+
+START_FILE = 'start_matrix.txt'
+MATRIX_FILE = 't_matrix.txt'
 
 def build_transition_matrix(full_text, ngram_list):
     start_ngrams, start_probs, word_list = build_unique_word_list(full_text)
@@ -13,6 +17,48 @@ def build_transition_matrix(full_text, ngram_list):
     t_matrix.save(ngram_list, word_list)
     save_starts(start_ngrams, start_probs)
     return t_matrix, start_ngrams, start_probs, word_list
+
+def test_for_matrix_files():
+    found_start_matrix = False
+    found_t_matrix = False
+    if os.path.isfile(START_FILE):
+        found_start_matrix = True
+    if os.path.isfile(MATRIX_FILE):
+        found_t_matrix = True
+    return found_start_matrix and found_t_matrix
+
+def read_start_matrix():
+    start_ngrams = []
+    start_probs = []
+    read_file = open(START_FILE, 'r')
+    for line in read_file:
+        new_line = line.rstrip().rpartition(' ')
+        start_ngrams.append(new_line[0])
+        start_probs.append(float(new_line[2]))
+    read_file.close()
+    return start_ngrams, start_probs
+
+def read_transition_matrix():
+    word_list = []
+    ngram_list = []
+    prob_matrix = []
+    read_file = open(MATRIX_FILE, 'r')
+    word_list = read_file.readline().split()
+    num_words = len(word_list)
+    for line in read_file:
+        new_line = line.split()
+        prob_list = new_line[len(new_line)-num_words:len(new_line)]
+        matrix_row = []
+        for prob in prob_list:
+            matrix_row.append(float(prob))
+        prob_matrix.append(matrix_row)
+        new_ngram = ' '.join(new_line[0:len(new_line)-num_words])
+        ngram_list.append(new_ngram)
+    read_file.close()
+    t_matrix = transition_matrix(num_ngrams=len(ngram_list),
+                                 num_words=num_words)
+    t_matrix.matrix = prob_matrix
+    return t_matrix, word_list, ngram_list
 
 def build_unique_word_list(full_text):
     '''
@@ -46,7 +92,7 @@ def build_unique_word_list(full_text):
     return start_ngrams, start_probs, word_list
 
 def save_starts(start_ngrams, start_probs):
-    save_file = open('start_matrix.txt', 'w')
+    save_file = open(START_FILE, 'w')
     for ingram in xrange(len(start_ngrams)):
         save_file.write(start_ngrams[ingram])
         save_file.write(' ')
@@ -93,13 +139,18 @@ class transition_matrix(object):
                 # Normalise each row of the matrix
 
     def save(self, ngram_list, word_list):
-        save_file = open('t_matrix.txt', 'w')
-        save_file.write(str(word_list))
+        save_file = open(MATRIX_FILE, 'w')
+        save_line = ' '.join(word_list)
+        save_file.write(save_line)
         save_file.write('\n')
         for ingram in xrange(len(ngram_list)):
+            prob_list = []
+            for iword in xrange(len(self.matrix[ingram])):
+                prob_list.append(str(self.matrix[ingram][iword]))
+            save_line = ' '.join(prob_list)
             save_file.write(ngram_list[ingram])
             save_file.write(' ')
-            save_file.write(str(self.matrix[ingram]))
+            save_file.write(save_line)
             save_file.write('\n')
         save_file.close()
 
