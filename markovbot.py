@@ -47,6 +47,8 @@ def main(corpus):
             # For any sentences after the first, just use the transition matrix
             if next_word_index == -1:
                 last_word, new_word = random_start(start_ngrams, start_probs)
+                if last_word not in ngrams.PUNCTUATION:
+                    sentence.append(' ')
                 sentence.append(last_word)
             else:
                 last_word = new_word
@@ -65,12 +67,9 @@ def main(corpus):
         to_append = ''.join(sentence)
         if len(to_append) <= 140:
             remaining_chars -= len(to_append)
-            if len(tweet) > 0:
-                remaining_chars -= 1
-                # Account for spaces between sentences
             tweet.append(to_append)
     if len(tweet) > 1:
-        new_tweet = ' '.join(tweet[0:len(tweet)-1])
+        new_tweet = ''.join(tweet[0:len(tweet)-1])
     else:
         new_tweet = tweet[0]
     print new_tweet
