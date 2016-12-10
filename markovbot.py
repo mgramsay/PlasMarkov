@@ -26,7 +26,6 @@ def main():
     remaining_chars = 140
     while remaining_chars > 0:
         sentence = []
-        print len(tweet)
         if len(tweet) == 0:
             start_ind = arb_random.get_random_index(start_probs)
             # Pick a random starting n-gram, based on frequency analysis of
