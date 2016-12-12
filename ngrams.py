@@ -2,22 +2,24 @@
 Module to handle sentence fragments (ngrams, punctuation, etc)
 '''
 
+from text_handler import PUNCTUATION
 
-PUNCTUATION = (',', '.', '?', '!', ':', ';')
-TERMINATOR = ('.', '?', '!')
+class ngram():
+    def __init__(self, word_list):
+        self.ngram = ''
+        for iword in xrange(len(word_list)):
+            if word_list[iword] in PUNCTUATION or iword == 0:
+                self.ngram += word_list[iword]
+            else:
+                self.ngram += (' ' + word_list[iword])
 
-def build_ngram(first_word, second_word):
-    if second_word in PUNCTUATION:
-        ngram = first_word + second_word
-    else:
-        ngram = first_word + ' ' + second_word
-    return ngram
-
-def split_ngram(ngram):
-    if ngram[len(ngram)-1] in PUNCTUATION:
-        first_word = ngram[0:len(ngram)-1]
-        second_word = ngram[len(ngram)-1]
-    else:
-        first_word, second_word = ngram.split()
-    return first_word, second_word
-
+    def split(self):
+        split_ngram = self.ngram.split()
+        word_list = []
+        for word in split_ngram:
+            if word.endswith(PUNCTUATION):
+                word_list.append(word[0:len(word)-1])
+                word_list.append(word[len(word)-1])
+            else:
+                word_list.append(word)
+        return word_list
