@@ -4,11 +4,6 @@ import markovbot
 import tweet
 
 def main(corpus):
-    # Check for matrix files
-    # Check if corpus file provided
-    # Build/load matrices
-    # Build tweet
-    # Send tweet
     markov = markovbot.bot()
     tweet_text = markov.build_tweet(corpus)
 

@@ -34,7 +34,7 @@ class matrix_list():
                 corpus_file = 'example.txt'
             self.build_matrices(corpus_file)
             self.save_matrices()
-            
+
     def load_matrices(self):
         self.read_start_matrix()
         self.read_tmatrix()
@@ -64,7 +64,7 @@ class matrix_list():
         read_file.close()
         self.initialise_tmatrix()
         self.t_matrix = prob_matrix
-        
+
     def build_matrices(self, corpus_file):
         corpus_text = text_handler.read_corpus(corpus_file)
         self.build_ngram_list(corpus_text)
@@ -128,7 +128,7 @@ class matrix_list():
             save_file.write(self.start_list[istart] + ' ' +
                             str(self.start_prob[istart]) + '\n')
         save_file.close()
-        
+
         save_file = open(MATRIX_FILE, 'w')
         save_line = ' '.join(self.word_list)
         save_file.write(save_line + '\n')

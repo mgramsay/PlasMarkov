@@ -6,7 +6,7 @@ def read_corpus(corpus_file):
     file_id = open(corpus_file, 'r')
     corpus_text = file_id.read()
     file_id.close()
-    
+
     strings = corpus_text.split()
     full_text = []
     for word in strings:
