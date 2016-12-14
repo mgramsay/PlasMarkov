@@ -1,4 +1,4 @@
-<img src="plasmarkov_icon.jpeg" alt="PlasMarkov logo" title="PlasMarkov logo" style="width: 100px;"/>
+<img src="plasmarkov_icon.jpeg" alt="PlasMarkov logo" title="PlasMarkov logo" width="100"/>
 # PlasMarkov
 A twitter bot which generates random statements using Markov chains ([@plasmarkov](https://twitter.com/plasmarkov)).
 
