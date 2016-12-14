@@ -18,28 +18,33 @@
 # OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 # SOFTWARE.
 
-'''
-Module to handle sentence fragments (ngrams, punctuation, etc)
-'''
+import os
+import tweepy
+from time import gmtime, strftime
 
-from text_handler import PUNCTUATION
+from secrets import *
 
-class ngram():
-    def __init__(self, word_list):
-        self.ngram = ''
-        for iword in xrange(len(word_list)):
-            if word_list[iword] in PUNCTUATION or iword == 0:
-                self.ngram += word_list[iword]
-            else:
-                self.ngram += (' ' + word_list[iword])
+class tweet():
+    def __init__(self):
+        return
 
-    def split(self):
-        split_ngram = self.ngram.split()
-        word_list = []
-        for word in split_ngram:
-            if word.endswith(PUNCTUATION):
-                word_list.append(word[0:len(word)-1])
-                word_list.append(word[len(word)-1])
-            else:
-                word_list.append(word)
-        return word_list
+    def send(self, text):
+#        auth = tweepy.OAuthHandler(C_KEY, C_SECRET)
+#        auth.set_access_token(A_TOKEN, A_TOKEN_SECRET)
+#        api = tweepy.API(auth)
+
+        try:
+#            api.update_status(text)
+            print text
+        except tweepy.error.TweepError as err:
+            return err.message
+        else:
+            return 'Tweeted: ' + text
+
+    def log(self, message, logfile_name):
+        path = os.path.realpath(os.path.join(os.getcwd(),
+                                             os.path.dirname(__file__)))
+        with open(os.path.join(path, logfile_name), 'a+') as logfile:
+            logtime = strftime('%d %b %Y %H:%M:%S', gmtime())
+            logfile.write(logtime + ' ' + message + '\n')
+        return

@@ -18,28 +18,21 @@
 # OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 # SOFTWARE.
 
-'''
-Module to handle sentence fragments (ngrams, punctuation, etc)
-'''
+PUNCTUATION = (',', '.', '?', '!', ':', ';')
+TERMINATOR = ('.', '?', '!')
 
-from text_handler import PUNCTUATION
+def read_corpus(corpus_file):
+    global PUNCTUATION
+    file_id = open(corpus_file, 'r')
+    corpus_text = file_id.read()
+    file_id.close()
 
-class ngram():
-    def __init__(self, word_list):
-        self.ngram = ''
-        for iword in xrange(len(word_list)):
-            if word_list[iword] in PUNCTUATION or iword == 0:
-                self.ngram += word_list[iword]
-            else:
-                self.ngram += (' ' + word_list[iword])
-
-    def split(self):
-        split_ngram = self.ngram.split()
-        word_list = []
-        for word in split_ngram:
-            if word.endswith(PUNCTUATION):
-                word_list.append(word[0:len(word)-1])
-                word_list.append(word[len(word)-1])
-            else:
-                word_list.append(word)
-        return word_list
+    strings = corpus_text.split()
+    full_text = []
+    for word in strings:
+        if word.endswith(PUNCTUATION):
+            full_text.append(word[0:len(word)-1])
+            full_text.append(word[len(word)-1])
+        else:
+            full_text.append(word)
+    return full_text

@@ -1,2 +1,5 @@
+secrets.py
 *.pyc
 .DS_Store
+start_matrix.txt
+t_matrix.txt

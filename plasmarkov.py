@@ -18,28 +18,21 @@
 # OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 # SOFTWARE.
 
-'''
-Module to handle sentence fragments (ngrams, punctuation, etc)
-'''
+import sys
 
-from text_handler import PUNCTUATION
+import markovbot
+import tweet
 
-class ngram():
-    def __init__(self, word_list):
-        self.ngram = ''
-        for iword in xrange(len(word_list)):
-            if word_list[iword] in PUNCTUATION or iword == 0:
-                self.ngram += word_list[iword]
-            else:
-                self.ngram += (' ' + word_list[iword])
+def main(corpus):
+    markov = markovbot.bot()
+    tweet_text = markov.build_tweet(corpus)
 
-    def split(self):
-        split_ngram = self.ngram.split()
-        word_list = []
-        for word in split_ngram:
-            if word.endswith(PUNCTUATION):
-                word_list.append(word[0:len(word)-1])
-                word_list.append(word[len(word)-1])
-            else:
-                word_list.append(word)
-        return word_list
+    new_tweet = tweet.tweet()
+    log_msg = new_tweet.send(tweet_text)
+    new_tweet.log(log_msg, markov.log)
+
+if __name__ == '__main__':
+    corpus = None
+    if len(sys.argv) > 1:
+        corpus = sys.argv[1]
+    main(corpus)
