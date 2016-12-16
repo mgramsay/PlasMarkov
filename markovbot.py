@@ -20,6 +20,7 @@
 
 import arb_random
 import matrices
+from ngrams import GRAM_LENGTH
 from text_handler import PUNCTUATION, TERMINATOR
 
 class bot():
@@ -34,12 +35,12 @@ class bot():
         while True:
             text = sentence()
             text.ngram = self.random_start(matrix)
-            text.add_word(text.ngram[0])
-            text.add_word(text.ngram[1])
+            for word in text.ngram:
+                text.add_word(word)
             print text.text
-            while text.ngram[1] not in TERMINATOR:
+            while text.ngram[GRAM_LENGTH-1] not in TERMINATOR:
                 text.ngram = self.get_next_word(matrix, text.ngram)
-                text.add_word(text.ngram[1])
+                text.add_word(text.ngram[GRAM_LENGTH-1])
                 print text.text
             if len(text.text) <= 140:
                 return text.text
@@ -51,12 +52,18 @@ class bot():
 
     def get_next_word(self, matrix, last_ngram):
         next_word_index = matrix.get_next_index(last_ngram)
-        return [last_ngram[1], matrix.word_list[next_word_index]]
+        new_ngram = []
+        for iword in xrange(len(last_ngram)-1):
+            new_ngram.append(last_ngram[iword+1])
+        new_ngram.append(matrix.word_list[next_word_index])
+        return new_ngram
 
 class sentence():
     def __init__(self):
         self.text = ''
-        self.ngram = ['', '']
+        self.ngram = []
+        for iword in xrange(GRAM_LENGTH):
+            self.ngram.append('')
 
     def add_word(self, word):
         if word in PUNCTUATION or len(self.text) == 0:
