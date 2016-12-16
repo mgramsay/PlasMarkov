@@ -50,11 +50,9 @@ class Bot(object):
             text.ngram = self.random_start(matrix)
             for word in text.ngram:
                 text.add_word(word)
-            print text.text
             while text.ngram[GRAM_LENGTH-1] not in TERMINATOR:
                 text.ngram = self.get_next_word(matrix, text.ngram)
                 text.add_word(text.ngram[GRAM_LENGTH-1])
-                print text.text
             if len(text.text) <= 140:
                 return text.text
 
