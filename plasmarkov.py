@@ -35,9 +35,8 @@ def main():
     markov = markovbot.Bot()
     tweet_text = markov.build_tweet(CORPUS)
 
-    new_tweet = tweet.Tweet()
-    log_msg = new_tweet.send(tweet_text)
-    new_tweet.log(log_msg, markov.log)
+    log_msg = tweet.send(tweet_text)
+    tweet.log(log_msg, markov.log)
 
 if __name__ == '__main__':
     CORPUS = None
