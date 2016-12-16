@@ -18,11 +18,19 @@
 # OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 # SOFTWARE.
 
+"""
+Module to handle the corpus text.
+"""
+
+# List of the punctuation marks to look out for
 PUNCTUATION = (',', '.', '?', '!', ':', ';')
+# Subset of punctuation marks which are used to mark the end of a sentence.
 TERMINATOR = ('.', '?', '!')
 
 def read_corpus(corpus_file):
-    global PUNCTUATION
+    """
+    Read the corpus file.
+    """
     file_id = open(corpus_file, 'r')
     corpus_text = file_id.read()
     file_id.close()

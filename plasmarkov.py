@@ -18,21 +18,29 @@
 # OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 # SOFTWARE.
 
+"""
+A twitter bot which generates messages using Markov chains (originally) based
+on the author's PhD thesis, but will run using any simple text file.
+"""
+
 import sys
 
 import markovbot
 import tweet
 
-def main(corpus):
+def main():
+    """
+    Main program
+    """
     markov = markovbot.bot()
-    tweet_text = markov.build_tweet(corpus)
+    tweet_text = markov.build_tweet(CORPUS)
 
     new_tweet = tweet.tweet()
     log_msg = new_tweet.send(tweet_text)
     new_tweet.log(log_msg, markov.log)
 
 if __name__ == '__main__':
-    corpus = None
+    CORPUS = None
     if len(sys.argv) > 1:
-        corpus = sys.argv[1]
-    main(corpus)
+        CORPUS = sys.argv[1]
+    main()

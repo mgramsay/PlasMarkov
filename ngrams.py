@@ -18,16 +18,22 @@
 # OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 # SOFTWARE.
 
-'''
-Module to handle sentence fragments (ngrams, punctuation, etc)
-'''
+"""
+Module to handle sentence fragments (ngrams, punctuation, etc).
+"""
 
 from text_handler import PUNCTUATION
 
 GRAM_LENGTH = 2
 
 class ngram():
+    """
+    Class to manipulate n-grams.
+    """
     def __init__(self, word_list):
+        """
+        Create an n-gram from a given list of words.
+        """
         self.ngram = ''
         for iword in xrange(len(word_list)):
             if word_list[iword] in PUNCTUATION or iword == 0:
@@ -36,6 +42,9 @@ class ngram():
                 self.ngram += (' ' + word_list[iword])
 
     def split(self):
+        """
+        Split the n-gram into its constituent words/punctuation.
+        """
         split_ngram = self.ngram.split()
         word_list = []
         for word in split_ngram:

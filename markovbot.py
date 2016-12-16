@@ -18,19 +18,32 @@
 # OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 # SOFTWARE.
 
+"""
+Generate twitter messages using Markov chains.
+"""
+
 import arb_random
 import matrices
 from ngrams import GRAM_LENGTH
 from text_handler import PUNCTUATION, TERMINATOR
 
 class bot():
+    """
+    Collection of methods to generate a twitter message.
+    """
     def __init__(self):
+        """
+        Initialise the bot.
+        """
         self.name = 'MarkovBot'
         self.log = self.name + '.log'
         self.found_matrix_files = matrices.test_for_matrix_files()
         return
 
     def build_tweet(self, corpus):
+        """
+        Build the twitter message.
+        """
         matrix = matrices.matrix_list(self.found_matrix_files, corpus)
         while True:
             text = sentence()
@@ -46,11 +59,17 @@ class bot():
                 return text.text
 
     def random_start(self, matrix):
+        """
+        Pick a random starting n-gram.
+        """
         start_index = arb_random.get_random_index(matrix.start_prob)
         start_ngram = matrix.get_start_words(start_index)
         return start_ngram
 
     def get_next_word(self, matrix, last_ngram):
+        """
+        Get the next word based on the previous n-gram.
+        """
         next_word_index = matrix.get_next_index(last_ngram)
         new_ngram = []
         for iword in xrange(len(last_ngram)-1):
@@ -59,15 +78,23 @@ class bot():
         return new_ngram
 
 class sentence():
+    """
+    Class to manage the twitter message.
+    """
     def __init__(self):
+        """
+        Create an empty message and n-gram.
+        """
         self.text = ''
         self.ngram = []
         for iword in xrange(GRAM_LENGTH):
             self.ngram.append('')
 
     def add_word(self, word):
+        """
+        Add a new word or punctuation character to the message.
+        """
         if word in PUNCTUATION or len(self.text) == 0:
             self.text += word
         else:
             self.text += (' ' + word)
-

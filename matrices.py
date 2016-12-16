@@ -18,9 +18,9 @@
 # OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 # SOFTWARE.
 
-'''
-Constructs the transition matrix
-'''
+"""
+Constructs the transition matrix.
+"""
 
 import os
 
@@ -32,6 +32,9 @@ START_FILE = 'start_matrix.txt'
 MATRIX_FILE = 't_matrix.txt'
 
 def test_for_matrix_files():
+    """
+    Check if the START_FILE and MATRIX_FILE already exist.
+    """
     found_start_matrix = False
     found_t_matrix = False
     if os.path.isfile(START_FILE):
@@ -41,7 +44,14 @@ def test_for_matrix_files():
     return found_start_matrix and found_t_matrix
 
 class matrix_list():
+    """
+    Class to manage the transition matrix, word list, n-gram list, etc.
+    """
     def __init__(self, found_matrix_files, corpus_file):
+        """
+        Create empty lists and populate either from a user-defined corpus or
+        using the lists generated last time the code was run.
+        """
         self.t_matrix = []
         self.word_list = []
         self.ngram_list = []
@@ -56,10 +66,17 @@ class matrix_list():
             self.save_matrices()
 
     def load_matrices(self):
+        """
+        Wrapper for calls to loading the matrix files.
+        """
         self.read_start_matrix()
         self.read_tmatrix()
 
     def read_start_matrix(self):
+        """
+        Read the starting n-gram list and associated probabilities stored in
+        START_FILE.
+        """
         read_file = open(START_FILE, 'r')
         for line in read_file:
             new_line = line.rstrip().rpartition(' ')
@@ -68,6 +85,10 @@ class matrix_list():
         read_file.close()
 
     def read_tmatrix(self):
+        """
+        Read the word list, n-gram list and transition matrix stored in
+        MATRIX_FILE
+        """
         read_file = open(MATRIX_FILE, 'r')
         self.word_list = read_file.readline().split()
         num_words = len(self.word_list)
@@ -86,12 +107,18 @@ class matrix_list():
         self.t_matrix = prob_matrix
 
     def build_matrices(self, corpus_file):
+        """
+        Wrapper for calling methods which build the various lists/matrices.
+        """
         corpus_text = text_handler.read_corpus(corpus_file)
         self.build_ngram_list(corpus_text)
         self.build_string_lists(corpus_text)
         self.build_tmatrix(corpus_text)
 
     def build_ngram_list(self, corpus_text):
+        """
+        Construct the list of n-grams which appear in the corpus
+        """
         for iword in xrange(len(corpus_text)-(ngrams.GRAM_LENGTH-1)):
             temp_word_list = []
             for jword in xrange(ngrams.GRAM_LENGTH):
@@ -101,6 +128,11 @@ class matrix_list():
                 self.ngram_list.append(new_ngram.ngram)
 
     def build_string_lists(self, corpus_text):
+        """
+        Construct a list of words which appear in the corpus. Also builds a
+        list of the n-grams which appear at the start of sentences along with
+        the probability of picking each one at random.
+        """
         new_sentence = True
         for iword in xrange(len(corpus_text)):
             word = corpus_text[iword]
@@ -125,6 +157,9 @@ class matrix_list():
             self.start_prob[iword] *= recip_num_starts
 
     def build_tmatrix(self, corpus_text):
+        """
+        Create and populate the transition matrix
+        """
         self.initialise_tmatrix()
         for iword in xrange(len(corpus_text)-ngrams.GRAM_LENGTH):
             temp_word_list = []
@@ -143,6 +178,9 @@ class matrix_list():
                 self.t_matrix[i_ngram][iword] *= recip_num_words
 
     def initialise_tmatrix(self):
+        """
+        Create a zero matrix of the correct dimensions.
+        """
         self.t_matrix = []
         for i_ngram in xrange(len(self.ngram_list)):
             word_count = []
@@ -151,6 +189,10 @@ class matrix_list():
             self.t_matrix.append(word_count)
 
     def save_matrices(self):
+        """
+        Write the starting n-gram probabilities, and transition matrix to disk
+        to allow them to be re-used.
+        """
         save_file = open(START_FILE, 'w')
         for istart in xrange(len(self.start_list)):
             save_file.write(self.start_list[istart] + ' ' +
@@ -170,14 +212,20 @@ class matrix_list():
         save_file.close()
 
     def get_start_words(self, start_index):
+        """
+        For a given list index return the corresponding n-gram from the
+        starting n-gram list.
+        """
         current = ngrams.ngram([self.start_list[start_index]])
         return current.split()
 
     def get_next_index(self, last_ngram):
+        """
+        For a given n-gram return a random word which could follow.
+        """
         current = ngrams.ngram(last_ngram)
         ngram_index = self.ngram_list.index(current.ngram)
         if sum(self.t_matrix[ngram_index]) < 0.5:
             return -1
         else:
             return arb_random.get_random_index(self.t_matrix[ngram_index])
-
