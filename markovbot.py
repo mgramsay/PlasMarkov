@@ -47,33 +47,33 @@ class Bot(object):
         matrix = matrices.MatrixList(self.found_matrix_files, corpus)
         while True:
             text = Sentence()
-            text.ngram = self.random_start(matrix)
+            text.ngram = random_start(matrix)
             for word in text.ngram:
                 text.add_word(word)
             while text.ngram[GRAM_LENGTH-1] not in TERMINATOR:
-                text.ngram = self.get_next_word(matrix, text.ngram)
+                text.ngram = get_next_word(matrix, text.ngram)
                 text.add_word(text.ngram[GRAM_LENGTH-1])
             if len(text.text) <= 140:
                 return text.text
 
-    def random_start(self, matrix):
-        """
-        Pick a random starting n-gram.
-        """
-        start_index = arb_random.get_random_index(matrix.start_prob)
-        start_ngram = matrix.get_start_words(start_index)
-        return start_ngram
+def random_start(matrix):
+    """
+    Pick a random starting n-gram.
+    """
+    start_index = arb_random.get_random_index(matrix.start_prob)
+    start_ngram = matrix.get_start_words(start_index)
+    return start_ngram
 
-    def get_next_word(self, matrix, last_ngram):
-        """
-        Get the next word based on the previous n-gram.
-        """
-        next_word_index = matrix.get_next_index(last_ngram)
-        new_ngram = []
-        for iword in xrange(len(last_ngram)-1):
-            new_ngram.append(last_ngram[iword+1])
-        new_ngram.append(matrix.word_list[next_word_index])
-        return new_ngram
+def get_next_word(matrix, last_ngram):
+    """
+    Get the next word based on the previous n-gram.
+    """
+    next_word_index = matrix.get_next_index(last_ngram)
+    new_ngram = []
+    for iword in xrange(len(last_ngram)-1):
+        new_ngram.append(last_ngram[iword+1])
+    new_ngram.append(matrix.word_list[next_word_index])
+    return new_ngram
 
 class Sentence(object):
     """
