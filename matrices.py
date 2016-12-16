@@ -93,10 +93,10 @@ class matrix_list():
 
     def build_ngram_list(self, corpus_text):
         for iword in xrange(len(corpus_text)-(ngrams.GRAM_LENGTH-1)):
-            word_list = []
+            temp_word_list = []
             for jword in xrange(ngrams.GRAM_LENGTH):
-                word_list.append(corpus_text[iword+jword])
-            new_ngram = ngrams.ngram(word_list)
+                temp_word_list.append(corpus_text[iword+jword])
+            new_ngram = ngrams.ngram(temp_word_list)
             if new_ngram.ngram not in self.ngram_list:
                 self.ngram_list.append(new_ngram.ngram)
 
@@ -107,10 +107,10 @@ class matrix_list():
             if word not in self.word_list:
                 self.word_list.append(word)
             if new_sentence:
-                word_list = []
+                temp_word_list = []
                 for jword in xrange(ngrams.GRAM_LENGTH):
-                    word_list.append(corpus_text[iword+jword])
-                new_start = ngrams.ngram(word_list)
+                    temp_word_list.append(corpus_text[iword+jword])
+                new_start = ngrams.ngram(temp_word_list)
                 if new_start.ngram not in self.start_list:
                     self.start_list.append(new_start.ngram)
                     self.start_prob.append(1.0)
@@ -126,11 +126,14 @@ class matrix_list():
 
     def build_tmatrix(self, corpus_text):
         self.initialise_tmatrix()
-        for iword in xrange(len(corpus_text)-2):
-            current = ngrams.ngram((corpus_text[iword],
-                                   corpus_text[iword+1]))
+        for iword in xrange(len(corpus_text)-ngrams.GRAM_LENGTH):
+            temp_word_list = []
+            for jword in xrange(ngrams.GRAM_LENGTH):
+                temp_word_list.append(corpus_text[iword+jword])
+            current = ngrams.ngram(temp_word_list)
             i_ngram = self.ngram_list.index(current.ngram)
-            next_word = self.word_list.index(corpus_text[iword+2])
+            next_word = self.word_list.index(corpus_text[iword + \
+                                                         ngrams.GRAM_LENGTH])
             self.t_matrix[i_ngram][next_word] += 1.0
         for i_ngram in xrange(len(self.t_matrix)):
             recip_num_words = sum(self.t_matrix[i_ngram])
