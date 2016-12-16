@@ -24,6 +24,8 @@ Module to handle sentence fragments (ngrams, punctuation, etc)
 
 from text_handler import PUNCTUATION
 
+GRAM_LENGTH = 2
+
 class ngram():
     def __init__(self, word_list):
         self.ngram = ''

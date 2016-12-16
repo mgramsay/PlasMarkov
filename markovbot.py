@@ -20,6 +20,7 @@
 
 import arb_random
 import matrices
+from ngrams import GRAM_LENGTH
 from text_handler import PUNCTUATION, TERMINATOR
 
 class bot():
@@ -30,52 +31,43 @@ class bot():
         return
 
     def build_tweet(self, corpus):
-        text = []
         matrix = matrices.matrix_list(self.found_matrix_files, corpus)
-        remaining_chars = 140
-        random_start = True
-        last_ngram = ['', '']
-        while remaining_chars > 0:
-            sentence, last_ngram = self.build_new_sentence(matrix,
-                                                           random_start,
-                                                           last_ngram)
-            if len(sentence) <= 140:
-                remaining_chars -= len(sentence)
-                text.append(sentence)
-                random_start = False
-        if len(text) > 1:
-            tweet = ''.join(text[0:len(text)-1])
-        else:
-            tweet = text[0]
-        return tweet
+        while True:
+            text = sentence()
+            text.ngram = self.random_start(matrix)
+            for word in text.ngram:
+                text.add_word(word)
+            print text.text
+            while text.ngram[GRAM_LENGTH-1] not in TERMINATOR:
+                text.ngram = self.get_next_word(matrix, text.ngram)
+                text.add_word(text.ngram[GRAM_LENGTH-1])
+                print text.text
+            if len(text.text) <= 140:
+                return text.text
 
-    def build_new_sentence(self, matrix, random_start, last_ngram):
-        sentence = []
-        last_word = last_ngram[0]
-        new_word = last_ngram[1]
-        if random_start:
-            start_index = arb_random.get_random_index(matrix.start_prob)
-            last_word, new_word = matrix.get_start_words(start_index)
-            sentence.append(last_word)
+    def random_start(self, matrix):
+        start_index = arb_random.get_random_index(matrix.start_prob)
+        start_ngram = matrix.get_start_words(start_index)
+        return start_ngram
+
+    def get_next_word(self, matrix, last_ngram):
+        next_word_index = matrix.get_next_index(last_ngram)
+        new_ngram = []
+        for iword in xrange(len(last_ngram)-1):
+            new_ngram.append(last_ngram[iword+1])
+        new_ngram.append(matrix.word_list[next_word_index])
+        return new_ngram
+
+class sentence():
+    def __init__(self):
+        self.text = ''
+        self.ngram = []
+        for iword in xrange(GRAM_LENGTH):
+            self.ngram.append('')
+
+    def add_word(self, word):
+        if word in PUNCTUATION or len(self.text) == 0:
+            self.text += word
         else:
-            next_word_index = matrix.get_next_index(last_word, new_word)
-            if next_word_index == -1:
-                start_index = arb_random.get_random_index(matrix.start_prob)
-                last_word, new_word = matrix.get_start_words(start_index)
-                if last_word not in PUNCTUATION:
-                    sentence.append(' ')
-                sentence.append(last_word)
-            else:
-                last_word = new_word
-                new_word = matrix.word_list[next_word_index]
-        if new_word not in PUNCTUATION:
-            sentence.append(' ')
-        sentence.append(new_word)
-        while new_word not in TERMINATOR:
-            next_word_index = matrix.get_next_index(last_word, new_word)
-            last_word = new_word
-            new_word = matrix.word_list[next_word_index]
-            if new_word not in PUNCTUATION:
-                sentence.append(' ')
-            sentence.append(new_word)
-        return ''.join(sentence), [last_word, new_word]
+            self.text += (' ' + word)
+
