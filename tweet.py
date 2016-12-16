@@ -28,7 +28,7 @@ import tweepy
 
 from secrets import *
 
-class tweet():
+class Tweet(object):
     """
     Collection of methods to handle the twitter interface.
     """

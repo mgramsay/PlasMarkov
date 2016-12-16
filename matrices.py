@@ -43,7 +43,7 @@ def test_for_matrix_files():
         found_t_matrix = True
     return found_start_matrix and found_t_matrix
 
-class matrix_list():
+class MatrixList(object):
     """
     Class to manage the transition matrix, word list, n-gram list, etc.
     """
@@ -123,7 +123,7 @@ class matrix_list():
             temp_word_list = []
             for jword in xrange(ngrams.GRAM_LENGTH):
                 temp_word_list.append(corpus_text[iword+jword])
-            new_ngram = ngrams.ngram(temp_word_list)
+            new_ngram = ngrams.Ngram(temp_word_list)
             if new_ngram.ngram not in self.ngram_list:
                 self.ngram_list.append(new_ngram.ngram)
 
@@ -142,7 +142,7 @@ class matrix_list():
                 temp_word_list = []
                 for jword in xrange(ngrams.GRAM_LENGTH):
                     temp_word_list.append(corpus_text[iword+jword])
-                new_start = ngrams.ngram(temp_word_list)
+                new_start = ngrams.Ngram(temp_word_list)
                 if new_start.ngram not in self.start_list:
                     self.start_list.append(new_start.ngram)
                     self.start_prob.append(1.0)
@@ -165,7 +165,7 @@ class matrix_list():
             temp_word_list = []
             for jword in xrange(ngrams.GRAM_LENGTH):
                 temp_word_list.append(corpus_text[iword+jword])
-            current = ngrams.ngram(temp_word_list)
+            current = ngrams.Ngram(temp_word_list)
             i_ngram = self.ngram_list.index(current.ngram)
             next_word = self.word_list.index(corpus_text[iword + \
                                                          ngrams.GRAM_LENGTH])
@@ -216,14 +216,14 @@ class matrix_list():
         For a given list index return the corresponding n-gram from the
         starting n-gram list.
         """
-        current = ngrams.ngram([self.start_list[start_index]])
+        current = ngrams.Ngram([self.start_list[start_index]])
         return current.split()
 
     def get_next_index(self, last_ngram):
         """
         For a given n-gram return a random word which could follow.
         """
-        current = ngrams.ngram(last_ngram)
+        current = ngrams.Ngram(last_ngram)
         ngram_index = self.ngram_list.index(current.ngram)
         if sum(self.t_matrix[ngram_index]) < 0.5:
             return -1

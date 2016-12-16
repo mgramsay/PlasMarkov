@@ -27,7 +27,7 @@ import matrices
 from ngrams import GRAM_LENGTH
 from text_handler import PUNCTUATION, TERMINATOR
 
-class bot():
+class Bot(object):
     """
     Collection of methods to generate a twitter message.
     """
@@ -44,9 +44,9 @@ class bot():
         """
         Build the twitter message.
         """
-        matrix = matrices.matrix_list(self.found_matrix_files, corpus)
+        matrix = matrices.MatrixList(self.found_matrix_files, corpus)
         while True:
-            text = sentence()
+            text = Sentence()
             text.ngram = self.random_start(matrix)
             for word in text.ngram:
                 text.add_word(word)
@@ -77,7 +77,7 @@ class bot():
         new_ngram.append(matrix.word_list[next_word_index])
         return new_ngram
 
-class sentence():
+class Sentence(object):
     """
     Class to manage the twitter message.
     """

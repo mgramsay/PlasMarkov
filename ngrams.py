@@ -26,7 +26,7 @@ from text_handler import PUNCTUATION
 
 GRAM_LENGTH = 2
 
-class ngram():
+class Ngram(object):
     """
     Class to manipulate n-grams.
     """

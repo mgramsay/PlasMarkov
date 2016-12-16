@@ -32,10 +32,10 @@ def main():
     """
     Main program
     """
-    markov = markovbot.bot()
+    markov = markovbot.Bot()
     tweet_text = markov.build_tweet(CORPUS)
 
-    new_tweet = tweet.tweet()
+    new_tweet = tweet.Tweet()
     log_msg = new_tweet.send(tweet_text)
     new_tweet.log(log_msg, markov.log)
 
