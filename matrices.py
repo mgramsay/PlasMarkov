@@ -107,7 +107,10 @@ class matrix_list():
             if word not in self.word_list:
                 self.word_list.append(word)
             if new_sentence:
-                new_start = ngrams.ngram((word, corpus_text[iword+1]))
+                word_list = []
+                for jword in xrange(ngrams.GRAM_LENGTH):
+                    word_list.append(corpus_text[iword+jword])
+                new_start = ngrams.ngram(word_list)
                 if new_start.ngram not in self.start_list:
                     self.start_list.append(new_start.ngram)
                     self.start_prob.append(1.0)
