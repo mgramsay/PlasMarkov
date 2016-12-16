@@ -170,7 +170,7 @@ class matrix_list():
         save_file.close()
 
     def get_start_words(self, start_index):
-        current = ngrams.ngram((self.start_list[start_index], ''))
+        current = ngrams.ngram([self.start_list[start_index]])
         return current.split()
 
     def get_next_index(self, last_ngram):
