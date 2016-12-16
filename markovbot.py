@@ -38,7 +38,6 @@ class Bot(object):
         self.name = 'MarkovBot'
         self.log = self.name + '.log'
         self.found_matrix_files = matrices.test_for_matrix_files()
-        return
 
     def build_tweet(self, corpus):
         """
