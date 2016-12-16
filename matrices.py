@@ -92,9 +92,11 @@ class matrix_list():
         self.build_tmatrix(corpus_text)
 
     def build_ngram_list(self, corpus_text):
-        for iword in xrange(len(corpus_text)-1):
-            new_ngram = ngrams.ngram((corpus_text[iword],
-                                      corpus_text[iword+1]))
+        for iword in xrange(len(corpus_text)-(ngrams.GRAM_LENGTH-1)):
+            word_list = []
+            for jword in xrange(ngrams.GRAM_LENGTH):
+                word_list.append(corpus_text[iword+jword])
+            new_ngram = ngrams.ngram(word_list)
             if new_ngram.ngram not in self.ngram_list:
                 self.ngram_list.append(new_ngram.ngram)
 
