@@ -18,17 +18,30 @@
 # OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 # SOFTWARE.
 
+"""
+Handles the linking to twitter.
+"""
+
 import os
-import tweepy
 from time import gmtime, strftime
+import tweepy
 
 from secrets import *
 
-class tweet():
+class Tweet(object):
+    """
+    Collection of methods to handle the twitter interface.
+    """
     def __init__(self):
+        """
+        Initialise the tweet object.
+        """
         return
 
     def send(self, text):
+        """
+        Post a message to twitter.
+        """
 #        auth = tweepy.OAuthHandler(C_KEY, C_SECRET)
 #        auth.set_access_token(A_TOKEN, A_TOKEN_SECRET)
 #        api = tweepy.API(auth)
@@ -42,6 +55,9 @@ class tweet():
             return 'Tweeted: ' + text
 
     def log(self, message, logfile_name):
+        """
+        Update the log file.
+        """
         path = os.path.realpath(os.path.join(os.getcwd(),
                                              os.path.dirname(__file__)))
         with open(os.path.join(path, logfile_name), 'a+') as logfile:

@@ -18,13 +18,22 @@
 # OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 # SOFTWARE.
 
+"""
+A module to handle random numbers, including generating numbers with an
+arbitrary distribution.
+"""
+
 import random
 
 
-def get_random_index(weights):
-    rr = random.random()
-    for i, w in enumerate(weights):
-        rr -= w
-        if rr < 0.0:
-            return i
-    return len(weights)-1
+def get_random_index(probabilities):
+    """
+    Generate a random array index based on an arbitrary probability
+    distribution.
+    """
+    remaining = random.random()
+    for index, prob_of_index in enumerate(probabilities):
+        remaining -= prob_of_index
+        if remaining < 0.0:
+            return index
+    return len(probabilities)-1
