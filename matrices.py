@@ -165,10 +165,11 @@ class matrix_list():
         current = ngrams.ngram((self.start_list[start_index], ''))
         return current.split()
 
-    def get_next_index(self, last_word, new_word):
-        current = ngrams.ngram((last_word, new_word))
+    def get_next_index(self, last_ngram):
+        current = ngrams.ngram(last_ngram)
         ngram_index = self.ngram_list.index(current.ngram)
         if sum(self.t_matrix[ngram_index]) < 0.5:
             return -1
         else:
             return arb_random.get_random_index(self.t_matrix[ngram_index])
+
