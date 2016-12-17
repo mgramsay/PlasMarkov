@@ -23,6 +23,7 @@ A twitter bot which generates messages using Markov chains (originally) based
 on the author's PhD thesis, but will run using any simple text file.
 """
 
+import os
 import sys
 
 import markovbot
@@ -32,6 +33,7 @@ def main():
     """
     Main program
     """
+    os.chdir(os.path.dirname(os.path.realpath(__file__)))
     markov = markovbot.Bot()
     tweet_text = markov.build_tweet(CORPUS)
 
