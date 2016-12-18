@@ -1,3 +1,4 @@
+# -*- coding: utf-8 -*-
 # Copyright (c) 2016 Martin Ramsay
 #
 # Permission is hereby granted, free of charge, to any person obtaining a copy
@@ -22,6 +23,7 @@
 Handles the linking to twitter.
 """
 
+import codecs
 import os
 from time import gmtime, strftime
 import tweepy
@@ -36,6 +38,7 @@ def send(text):
     auth.set_access_token(A_TOKEN, A_TOKEN_SECRET)
     api = tweepy.API(auth)
 
+    print 'Sending: ' + text
     try:
         api.update_status(text)
     except tweepy.error.TweepError as err:
@@ -49,6 +52,7 @@ def log(message, logfile_name):
     """
     path = os.path.realpath(os.path.join(os.getcwd(),
                                          os.path.dirname(__file__)))
-    with open(os.path.join(path, logfile_name), 'a+') as logfile:
+    with codecs.open(os.path.join(path, logfile_name), mode='a+',
+                     encoding='utf-8') as logfile:
         logtime = strftime('%d %b %Y %H:%M:%S', gmtime())
         logfile.write(logtime + ' ' + message + '\n')
