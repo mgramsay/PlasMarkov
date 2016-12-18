@@ -38,6 +38,7 @@ def send(text):
     auth.set_access_token(A_TOKEN, A_TOKEN_SECRET)
     api = tweepy.API(auth)
 
+    print 'Sending: ' + text
     try:
         api.update_status(text)
     except tweepy.error.TweepError as err:
