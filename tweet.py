@@ -23,6 +23,7 @@
 Handles the linking to twitter.
 """
 
+import codecs
 import os
 from time import gmtime, strftime
 import tweepy
@@ -50,6 +51,7 @@ def log(message, logfile_name):
     """
     path = os.path.realpath(os.path.join(os.getcwd(),
                                          os.path.dirname(__file__)))
-    with open(os.path.join(path, logfile_name), 'a+') as logfile:
+    with codecs.open(os.path.join(path, logfile_name), mode='a+',
+                     encoding='utf-8') as logfile:
         logtime = strftime('%d %b %Y %H:%M:%S', gmtime())
         logfile.write(logtime + ' ' + message + '\n')

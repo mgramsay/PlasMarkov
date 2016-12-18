@@ -23,6 +23,7 @@
 Constructs the transition matrix.
 """
 
+import codecs
 import os
 
 import arb_random
@@ -78,7 +79,7 @@ class MatrixList(object):
         Read the starting n-gram list and associated probabilities stored in
         START_FILE.
         """
-        read_file = open(START_FILE, 'r')
+        read_file = codecs.open(START_FILE, mode='r', encoding='utf-8')
         for line in read_file:
             new_line = line.rstrip().rpartition(' ')
             self.start_list.append(new_line[0])
@@ -90,7 +91,7 @@ class MatrixList(object):
         Read the word list, n-gram list and transition matrix stored in
         MATRIX_FILE
         """
-        read_file = open(MATRIX_FILE, 'r')
+        read_file = codecs.open(MATRIX_FILE, mode='r', encoding='utf-8')
         self.word_list = read_file.readline().split()
         num_words = len(self.word_list)
         prob_matrix = []
@@ -194,13 +195,13 @@ class MatrixList(object):
         Write the starting n-gram probabilities, and transition matrix to disk
         to allow them to be re-used.
         """
-        save_file = open(START_FILE, 'w')
+        save_file = codecs.open(START_FILE, mode='w', encoding='utf-8')
         for istart in xrange(len(self.start_list)):
             save_file.write(self.start_list[istart] + ' ' +
                             str(self.start_prob[istart]) + '\n')
         save_file.close()
 
-        save_file = open(MATRIX_FILE, 'w')
+        save_file = codecs.open(MATRIX_FILE, mode='w', encoding='utf-8')
         save_line = ' '.join(self.word_list)
         save_file.write(save_line + '\n')
         for i_ngram in xrange(len(self.ngram_list)):
