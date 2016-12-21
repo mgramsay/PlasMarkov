@@ -31,7 +31,7 @@ import matrices
 from ngrams import GRAM_LENGTH
 from text_handler import PUNCTUATION, TERMINATOR
 
-TWEET_FILE = 'tweet.txt'
+TWEET_FILE = 'saved_tweet.txt'
 
 class Bot(object):
     """

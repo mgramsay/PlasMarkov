@@ -3,3 +3,5 @@ secrets.py
 .DS_Store
 start_matrix.txt
 t_matrix.txt
+tweet.txt
+MarkovBot.log

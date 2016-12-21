@@ -20,12 +20,10 @@
 # SOFTWARE.
 
 """
-A twitter bot which generates messages using Markov chains (originally) based
-on the author's PhD thesis, but will run using any simple text file.
+A simple script to post pre-prepared messages to twitter.
 """
 
 import os
-import sys
 
 import markovbot
 import tweet
@@ -36,13 +34,14 @@ def main():
     """
     os.chdir(os.path.dirname(os.path.realpath(__file__)))
     markov = markovbot.Bot()
-    markov.build_tweet(CORPUS)
-    markov.save_tweet()
-    log_msg = 'Saved tweet: ' + markov.tweet.text
+    if os.path.isfile(markovbot.TWEET_FILE):
+        read_file = open(markovbot.TWEET_FILE, 'r')
+        saved_tweet = read_file.read()
+        read_file.close()
+        log_msg = tweet.send(saved_tweet)
+    else:
+        log_msg = 'File "' + markovbot.TWEET_FILE + '" not found'
     tweet.log(log_msg, markov.log)
 
 if __name__ == '__main__':
-    CORPUS = None
-    if len(sys.argv) > 1:
-        CORPUS = sys.argv[1]
     main()
