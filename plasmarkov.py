@@ -42,6 +42,7 @@ def main():
     read_file = open(markovbot.TWEET_FILE, 'r')
     saved_tweet = read_file.read()
     read_file.close()
+
     log_msg = tweet.send(saved_tweet)
     tweet.log(log_msg, markov.log)
 

@@ -38,10 +38,11 @@ def send(text):
     auth.set_access_token(A_TOKEN, A_TOKEN_SECRET)
     api = tweepy.API(auth)
 
-    print ('Sending: ' + text).decode('utf-8')
+    print 'Sending: ' + text
     try:
-        api.update_status(text.decode('utf-8'))
+        api.update_status(text)
     except tweepy.error.TweepError as err:
+        print err.message
         return err.message
     else:
         return 'Tweeted: ' + text
@@ -55,4 +56,4 @@ def log(message, logfile_name):
     with codecs.open(os.path.join(path, logfile_name), mode='a+',
                      encoding='utf-8') as logfile:
         logtime = strftime('%d %b %Y %H:%M:%S', gmtime())
-        logfile.write((logtime + ' ' + message + '\n').decode('utf-8'))
+        logfile.write(logtime + (' ' + message + '\n').decode('utf-8'))
