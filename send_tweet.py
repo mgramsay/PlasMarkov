@@ -20,7 +20,7 @@
 # SOFTWARE.
 
 """
-A simple script to post pre-prepared messages to twitter.
+A simple script to post pre-prepared messages to Twitter.
 """
 
 import os

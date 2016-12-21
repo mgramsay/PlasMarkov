@@ -20,7 +20,7 @@
 # SOFTWARE.
 
 """
-Generate twitter messages using Markov chains.
+Generate Twitter messages using Markov chains.
 """
 
 import codecs
@@ -35,7 +35,7 @@ TWEET_FILE = 'saved_tweet.txt'
 
 class Bot(object):
     """
-    Collection of methods to generate a twitter message.
+    Collection of methods to generate a Twitter message.
     """
     def __init__(self):
         """
@@ -49,7 +49,7 @@ class Bot(object):
 
     def build_tweet(self, corpus):
         """
-        Build the twitter message.
+        Build the Twitter message.
         """
         matrix = matrices.MatrixList(self.found_matrix_files, corpus)
         while True:
@@ -93,7 +93,7 @@ def get_next_word(matrix, last_ngram):
 
 class Sentence(object):
     """
-    Class to manage the twitter message.
+    Class to manage the Twitter message.
     """
     def __init__(self):
         """
