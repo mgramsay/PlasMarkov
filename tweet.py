@@ -20,7 +20,7 @@
 # SOFTWARE.
 
 """
-Handles the linking to twitter.
+Handles the linking to Twitter.
 """
 
 import codecs
@@ -32,7 +32,7 @@ from secrets import C_KEY, C_SECRET, A_TOKEN, A_TOKEN_SECRET
 
 def send(text):
     """
-    Post a message to twitter.
+    Post a message to Twitter.
     """
     auth = tweepy.OAuthHandler(C_KEY, C_SECRET)
     auth.set_access_token(A_TOKEN, A_TOKEN_SECRET)

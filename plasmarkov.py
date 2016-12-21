@@ -20,7 +20,7 @@
 # SOFTWARE.
 
 """
-A twitter bot which generates messages using Markov chains (originally) based
+A Twitter bot which generates messages using Markov chains (originally) based
 on the author's PhD thesis, but will run using any simple text file.
 """
 
