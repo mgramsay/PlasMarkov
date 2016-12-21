@@ -23,6 +23,8 @@
 Module to handle the corpus text.
 """
 
+import codecs
+
 # List of the punctuation marks to look out for
 PUNCTUATION = (',', '.', '?', '!', ':', ';')
 # Subset of punctuation marks which are used to mark the end of a sentence.
@@ -32,8 +34,8 @@ def read_corpus(corpus_file):
     """
     Read the corpus file.
     """
-    file_id = open(corpus_file, 'r')
-    corpus_text = file_id.read()
+    file_id = codecs.open(corpus_file, mode='r', encoding='utf-8')
+    corpus_text = file_id.read().encode('utf-8')
     file_id.close()
 
     strings = corpus_text.split()

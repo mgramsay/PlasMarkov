@@ -81,7 +81,7 @@ class MatrixList(object):
         """
         read_file = codecs.open(START_FILE, mode='r', encoding='utf-8')
         for line in read_file:
-            new_line = line.rstrip().rpartition(' ')
+            new_line = line.encode('utf-8').rstrip().rpartition(' ')
             self.start_list.append(new_line[0])
             self.start_prob.append(float(new_line[2]))
         read_file.close()
@@ -92,11 +92,11 @@ class MatrixList(object):
         MATRIX_FILE
         """
         read_file = codecs.open(MATRIX_FILE, mode='r', encoding='utf-8')
-        self.word_list = read_file.readline().split()
+        self.word_list = read_file.readline().encode('utf-8').split()
         num_words = len(self.word_list)
         prob_matrix = []
         for line in read_file:
-            new_line = line.split()
+            new_line = line.encode('utf-8').split()
             prob_list = new_line[len(new_line)-num_words:len(new_line)]
             matrix_row = []
             for prob in prob_list:
@@ -197,20 +197,22 @@ class MatrixList(object):
         """
         save_file = codecs.open(START_FILE, mode='w', encoding='utf-8')
         for istart in xrange(len(self.start_list)):
-            save_file.write(self.start_list[istart] + ' ' +
-                            str(self.start_prob[istart]) + '\n')
+            line_to_write = self.start_list[istart] + ' ' + \
+                            str(self.start_prob[istart]) + '\n'
+            save_file.write(line_to_write.decode('utf-8'))
         save_file.close()
 
         save_file = codecs.open(MATRIX_FILE, mode='w', encoding='utf-8')
         save_line = ' '.join(self.word_list)
-        save_file.write(save_line + '\n')
+        save_file.write((save_line + '\n').decode('utf-8'))
         for i_ngram in xrange(len(self.ngram_list)):
             prob_list = []
             for iword in xrange(len(self.word_list)):
-                prob_list.append(str(self.t_matrix[i_ngram][iword]))
+                prob_list.append(unicode(self.t_matrix[i_ngram][iword]))
             save_line = ' '.join(prob_list)
-            save_file.write(self.ngram_list[i_ngram] + ' ' +
-                            save_line + '\n')
+            line_to_write = self.ngram_list[i_ngram] + ' ' + \
+                            str(save_line) + '\n'
+            save_file.write(line_to_write.decode('utf-8'))
         save_file.close()
 
     def get_start_words(self, start_index):
