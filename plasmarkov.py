@@ -36,9 +36,14 @@ def main():
     """
     os.chdir(os.path.dirname(os.path.realpath(__file__)))
     markov = markovbot.Bot()
-    tweet_text = markov.build_tweet(CORPUS)
+    markov.build_tweet(CORPUS)
+    markov.save_tweet()
 
-    log_msg = tweet.send(tweet_text)
+    read_file = open(markovbot.TWEET_FILE, 'r')
+    saved_tweet = read_file.read()
+    read_file.close()
+
+    log_msg = tweet.send(saved_tweet)
     tweet.log(log_msg, markov.log)
 
 if __name__ == '__main__':

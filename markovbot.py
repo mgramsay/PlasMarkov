@@ -23,10 +23,15 @@
 Generate twitter messages using Markov chains.
 """
 
+import codecs
+import os
+
 import arb_random
 import matrices
 from ngrams import GRAM_LENGTH
 from text_handler import PUNCTUATION, TERMINATOR
+
+TWEET_FILE = 'tweet.txt'
 
 class Bot(object):
     """
@@ -39,6 +44,8 @@ class Bot(object):
         self.name = 'MarkovBot'
         self.log = self.name + '.log'
         self.found_matrix_files = matrices.test_for_matrix_files()
+        self.found_prepared_tweet = os.path.isfile(TWEET_FILE)
+        self.tweet = Sentence()
 
     def build_tweet(self, corpus):
         """
@@ -54,7 +61,16 @@ class Bot(object):
                 text.ngram = get_next_word(matrix, text.ngram)
                 text.add_word(text.ngram[GRAM_LENGTH-1])
             if len(text.text) <= 140:
-                return text.text
+                self.tweet = text
+                return
+
+    def save_tweet(self):
+        """
+        Save a tweet for use later.
+        """
+        save_file = codecs.open(TWEET_FILE, mode='w', encoding='utf-8')
+        save_file.write(self.tweet.text.decode('utf-8'))
+        save_file.close()
 
 def random_start(matrix):
     """
