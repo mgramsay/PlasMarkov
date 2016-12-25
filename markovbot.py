@@ -24,6 +24,7 @@ Generate Twitter messages using Markov chains.
 """
 
 import codecs
+import datetime
 import os
 
 import arb_random
@@ -32,6 +33,7 @@ from ngrams import GRAM_LENGTH
 from text_handler import PUNCTUATION, TERMINATOR
 
 TWEET_FILE = 'saved_tweet.txt'
+XMAS = False
 
 class Bot(object):
     """
@@ -46,6 +48,10 @@ class Bot(object):
         self.found_matrix_files = matrices.test_for_matrix_files()
         self.found_prepared_tweet = os.path.isfile(TWEET_FILE)
         self.tweet = Sentence()
+        if datetime.date.today().month == 12 and \
+           datetime.date.today().day == 25:
+            global XMAS
+            XMAS = True
 
     def build_tweet(self, corpus):
         """
@@ -57,6 +63,8 @@ class Bot(object):
             text.ngram = random_start(matrix)
             for word in text.ngram:
                 text.add_word(word)
+            if XMAS:
+                text.ngram[0] = 'It'
             while text.ngram[GRAM_LENGTH-1] not in TERMINATOR:
                 text.ngram = get_next_word(matrix, text.ngram)
                 text.add_word(text.ngram[GRAM_LENGTH-1])
@@ -78,6 +86,8 @@ def random_start(matrix):
     """
     start_index = arb_random.get_random_index(matrix.start_prob)
     start_ngram = matrix.get_start_words(start_index)
+    if XMAS:
+        start_ngram = ['Christmas', 'is']
     return start_ngram
 
 def get_next_word(matrix, last_ngram):
