@@ -38,6 +38,7 @@ def main():
         read_file = open(markovbot.TWEET_FILE, 'r')
         saved_tweet = read_file.read()
         read_file.close()
+        os.remove(markovbot.TWEET_FILE)
         log_msg = tweet.send(saved_tweet)
     else:
         log_msg = 'File "' + markovbot.TWEET_FILE + '" not found'
